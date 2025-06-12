@@ -1,0 +1,72 @@
+-Start the parking session for a specific vehicle
+DELIMITER //
+ CREATE PROCEDURE StartParkingSession(IN vehicle_id INT, IN desired_lot INT)
+ BEGIN
+    DECLARE vacant_slot INT;
+     SELECT slot_id INTO vacant_slot
+    FROM ParkingSlots
+    WHERE lot_id = desired_lot AND status = 'vacant'
+    LIMIT 1;
+    IF vacant_slot IS NOT NULL THEN
+        -- Insert into ParkingSessions
+        INSERT INTO ParkingSessions (vehicle_id, slot_id)
+        VALUES (vehicle_id, vacant_slot);
+        UPDATE ParkingSlots
+        SET status = 'occupied'
+        WHERE slot_id = vacant_slot;
+        SELECT CONCAT('Parking session started for Vehicle ID ', vehicle_id, ' in Slot ID ', vacant_slot) AS message;
+    ELSE
+        SELECT 'No vacant slots available in the requested lot.' AS message;
+    END IF;
+ END //
+
+
+
+-Calculate the Parking fee
+ DELIMITER //
+ CREATE PROCEDURE CalculateParkingFee(IN p_session_id INT)
+ BEGIN
+    DECLARE p_vehicle_id INT;
+    DECLARE p_customer_id INT;
+    DECLARE p_membership_id INT;
+    DECLARE p_entry_time TIMESTAMP;
+    DECLARE p_exit_time TIMESTAMP;
+    DECLARE p_duration_hours DECIMAL(10, 2);
+    DECLARE p_total_price DECIMAL(10, 2);
+    DECLARE p_discount_rate DECIMAL(10, 2) DEFAULT 0.00;
+    DECLARE hourly_rate DECIMAL(10, 2) DEFAULT 100.00;
+    DECLARE p_message VARCHAR(255);
+    SELECT ps.vehicle_id, ps.exit_time, v.customer_id 
+    INTO p_vehicle_id, p_exit_time, p_customer_id
+    FROM ParkingSessions ps
+    JOIN Vehicles v ON ps.vehicle_id = v.vehicle_id
+    WHERE ps.session_id = p_session_id
+    LIMIT 1;
+    SELECT entry_time 
+    INTO p_entry_time
+    FROM Vehicles
+    WHERE vehicle_id = p_vehicle_id
+    LIMIT 1;
+    SELECT membership_id 
+    INTO p_membership_id
+    FROM Customers
+    WHERE customer_id = p_customer_id
+    LIMIT 1;
+    IF p_membership_id IS NOT NULL THEN
+ PROCEDURE: Calculate the parking fee 
+        SELECT hourly_discount 
+        INTO p_discount_rate
+        FROM MembershipPlans
+        WHERE plan_id = p_membership_id
+        LIMIT 1;
+    END IF;
+    SET p_duration_hours = TIMESTAMPDIFF(MINUTE, p_entry_time, p_exit_time) / 60;
+    SET p_total_price = (p_duration_hours * hourly_rate) * (1 - (p_discount_rate / 100));
+    UPDATE ParkingSessions
+    SET price = p_total_price
+    WHERE session_id = p_session_id;
+    SET p_message = CONCAT('Total parking fee for session ', p_session_id, 
+                           ' is $', FORMAT(p_total_price, 2), 
+                           '. Discount applied: ', FORMAT(p_discount_rate, 2), '%');
+    SELECT p_message AS fee_message;
+ END //
