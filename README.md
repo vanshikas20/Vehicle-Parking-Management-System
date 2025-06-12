@@ -23,9 +23,13 @@ calculations.
  Definitions:
  
  Customer: A person who registers to use the parking services.
+ 
  Vehicle: A registered car linked to a customer.
+ 
  Parking Slot: A spot in a parking lot, either vacant or occupied.
+ 
  Parking Session: A record of a vehicle’s parking time, including entry and exit times.
+ 
  Membership Plan: Subscription plans o ering benefits like discounts for parking.
  
  2. SYSTEM OVERVIEW
