@@ -1,0 +1,28 @@
+-if new lot is added to parkinglot table then new rows will be inserted into parkingslots respectively
+ DELIMITER //
+ CREATE TRIGGER after_parkinglot_insert
+ AFTER INSERT ON parkinglots
+ FOR EACH ROW
+ BEGIN
+ DECLARE i INT DEFAULT 1;
+ WHILE i <= NEW.total_spots DO
+        INSERT INTO parkingslots (lot_id, status) VALUES (NEW.lot_id, 'vacant');
+        SET i = i + 1;
+    END WHILE;
+ END//
+
+
+-update the status to vacant once the vehicle exits the parkingsession
+ DELIMITER //
+ CREATE TRIGGER AfterParkingSessionEnd
+ AFTER UPDATE ON ParkingSessions
+ FOR EACH ROW
+ BEGIN
+    IF NEW.exit_time IS NOT NULL THEN
+        UPDATE ParkingSlots
+ PROCEDURE: Start the parking session for a specific vehicle
+ TRIGGER:update the status to vacant once the vehicle exits the parkingsession
+        SET status = 'vacant'
+        WHERE slot_id = NEW.slot_id;
+    END IF;
+ END //
