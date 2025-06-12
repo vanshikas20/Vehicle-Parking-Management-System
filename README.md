@@ -7,6 +7,7 @@ and fee calculations. The system promotes e cient space utilization and o ers me
 based benefits to enhance customer satisfaction. It provides better management and 
 scalability for di erent parking setups. This ensures a modernized and user-friendly parking 
 experience for both customers and operators. 
+
 Scope:
  The Parking Management System will allow for:
  Manage customers and their memberships.
@@ -15,6 +16,7 @@ Scope:
  Automate slot allocation using triggers and stored procedures.
  O er a user-friendly interface for customer management, vehicle tracking, and fee 
 calculations.
+
  Definitions:
  Customer: A person who registers to use the parking services.
  Vehicle: A registered car linked to a customer.
