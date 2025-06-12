@@ -2,6 +2,7 @@
  1.INTRODUCTION
  
  Purpose:
+ 
  The purpose of the Parking Management System is to streamline parking operations by 
 automating slot allocation and tracking. It simplifies customer registration, vehicle tracking, 
 and fee calculations. The system promotes e cient space utilization and o ers membership
@@ -10,6 +11,7 @@ scalability for di erent parking setups. This ensures a modernized and user-frie
 experience for both customers and operators. 
 
 Scope:
+
  The Parking Management System will allow for:
  Manage customers and their memberships.
  Track parking lots, parking slots, and vehicle parking sessions.
@@ -27,6 +29,7 @@ calculations.
  Membership Plan: Subscription plans o ering benefits like discounts for parking.
  
  2. SYSTEM OVERVIEW
+
  The Parking Management System is composed of:
 
  1. Membership Plans: Define customer benefits such as discounts and additional perks.
