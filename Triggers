@@ -20,8 +20,6 @@
  BEGIN
     IF NEW.exit_time IS NOT NULL THEN
         UPDATE ParkingSlots
- PROCEDURE: Start the parking session for a specific vehicle
- TRIGGER:update the status to vacant once the vehicle exits the parkingsession
         SET status = 'vacant'
         WHERE slot_id = NEW.slot_id;
     END IF;
