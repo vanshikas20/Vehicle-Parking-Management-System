@@ -53,7 +53,6 @@ DELIMITER //
     WHERE customer_id = p_customer_id
     LIMIT 1;
     IF p_membership_id IS NOT NULL THEN
- PROCEDURE: Calculate the parking fee 
         SELECT hourly_discount 
         INTO p_discount_rate
         FROM MembershipPlans
